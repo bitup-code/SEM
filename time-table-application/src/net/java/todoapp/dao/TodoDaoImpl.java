@@ -29,7 +29,7 @@ public class TodoDaoImpl implements TodoDao {
 	@Override
 	public void insertTodo(Todo todo) throws SQLException {
 		System.out.println(INSERT_TODOS_SQL);
-		// try-with-resource statement will auto close the connection.
+
 		try (Connection connection = JDBCUtils.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_TODOS_SQL)) {
 			preparedStatement.setString(1, todo.getTitle());
@@ -47,16 +47,16 @@ public class TodoDaoImpl implements TodoDao {
 	@Override
 	public Todo selectTodo(long todoId) {
 		Todo todo = null;
-		// Step 1: Establishing a Connection
+
 		try (Connection connection = JDBCUtils.getConnection();
-				// Step 2:Create a statement using connection object
+
 				PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TODO_BY_ID);) {
 			preparedStatement.setLong(1, todoId);
 			System.out.println(preparedStatement);
-			// Step 3: Execute the query or update query
+
 			ResultSet rs = preparedStatement.executeQuery();
 
-			// Step 4: Process the ResultSet object.
+
 			while (rs.next()) {
 				long id = rs.getLong("id");
 				String title = rs.getString("title");
@@ -75,19 +75,18 @@ public class TodoDaoImpl implements TodoDao {
 	@Override
 	public List<Todo> selectAllTodos() {
 
-		// using try-with-resources to avoid closing resources (boiler plate code)
 		List<Todo> todos = new ArrayList<>();
 
-		// Step 1: Establishing a Connection
+
 		try (Connection connection = JDBCUtils.getConnection();
 
-				// Step 2:Create a statement using connection object
+
 				PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_TODOS);) {
 			System.out.println(preparedStatement);
-			// Step 3: Execute the query or update query
+
 			ResultSet rs = preparedStatement.executeQuery();
 
-			// Step 4: Process the ResultSet object.
+
 			while (rs.next()) {
 				long id = rs.getLong("id");
 				String title = rs.getString("title");
